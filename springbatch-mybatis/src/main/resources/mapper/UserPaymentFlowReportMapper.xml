@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wl.mapper.UserPaymentFlowReportMapper">
+
+
+    <insert id="add" parameterType="com.wl.model.UserPaymentReportEntity">
+        insert into user_payment_report(user_id, statistics_date, amount) values
+         (#{userId, jdbcType=BIGINT}, #{statisticsDate, jdbcType=DATE}, #{amount, jdbcType=DECIMAL})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into user_payment_report(user_id, statistics_date, amount) value
+            <foreach collection="java.util.List" item="item" index="index" separator=",">
+                (#{userId, jdbcType=BIGINT}, #{statisticsDate, jdbcType=DATE}, #{amount, jdbType=DECIMAL})
+            </foreach>
+    </insert>
+
+</mapper>
