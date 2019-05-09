@@ -1,4 +1,4 @@
-package com.wl.service.impl;
+package com.wl.service;
 
 import com.wl.mapper.UserPaymentFlowReportMapper;
 import com.wl.model.UserPaymentReportEntity;

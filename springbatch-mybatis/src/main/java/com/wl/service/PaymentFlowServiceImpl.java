@@ -1,4 +1,4 @@
-package com.wl.service.impl;
+package com.wl.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wl.mapper.PaymentFlowMapper;

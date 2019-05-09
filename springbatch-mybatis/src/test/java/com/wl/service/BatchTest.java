@@ -1,4 +1,4 @@
-package com.wl.service.impl;
+package com.wl.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

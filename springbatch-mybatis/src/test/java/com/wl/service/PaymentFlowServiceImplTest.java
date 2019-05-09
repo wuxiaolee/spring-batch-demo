@@ -1,4 +1,4 @@
-package com.wl.service.impl;
+package com.wl.service;
 
 import com.wl.model.PaymentFlowEntity;
 import com.wl.model.UserPaymentReportEntity;
