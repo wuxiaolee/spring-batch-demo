@@ -6,7 +6,6 @@ import com.wl.mapper.UserPaymentFlowReportMapper;
 import com.wl.model.PaymentFlowEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
 import org.mybatis.spring.batch.MyBatisPagingItemReader;
@@ -93,7 +92,7 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
     public Step jobOperatorPaymentFlowStep() throws Exception {
         return stepBuilderFactory.get("jobOperatorPaymentFlowStep")
                 .listener(stepListener)
-                .<PaymentFlowEntity, PaymentFlowEntity>chunk(1)
+                .<PaymentFlowEntity, PaymentFlowEntity>chunk(10)
                 .reader(jobOperatorReader())
                 .processor(jobOperatorProcessor())
                 .writer(jobOperatorWriter())
