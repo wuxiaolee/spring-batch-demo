@@ -73,8 +73,6 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
     @Autowired
     private JobRegistry jobRegistry;
 
-    private Map<String, JobParameter> parameter;
-
     private ApplicationContext context;
 
 

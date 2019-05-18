@@ -19,6 +19,10 @@
         <mybatisplus.version>3.0.7.1</mybatisplus.version>
     </properties>
 
+    <modules>
+        <module>local-partitioning</module>
+    </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
