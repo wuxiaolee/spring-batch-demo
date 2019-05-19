@@ -1,6 +1,7 @@
-package com.wl.localpartitioning;
+package com.wl;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.integration.config.annotation.EnableBatchIntegration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,10 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @EnableBatchProcessing
-public class LocalPartitioningApplication {
+@EnableBatchIntegration
+public class MasterRemotePartitioningApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(LocalPartitioningApplication.class, args);
+        SpringApplication.run(MasterRemotePartitioningApplication.class, args);
     }
 
 }

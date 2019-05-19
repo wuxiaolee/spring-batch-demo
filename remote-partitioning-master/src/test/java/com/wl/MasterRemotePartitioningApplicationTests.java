@@ -1,4 +1,4 @@
-package com.wl.localpartitioning;
+package com.wl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -21,19 +21,19 @@ import java.util.Date;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LocalPartitioningApplicationTests {
+public class MasterRemotePartitioningApplicationTests {
 
    @Autowired
    private JobLauncher jobLauncher;
    @Autowired
-   @Qualifier(value = "localPartitioningJob")
+   @Qualifier(value = "remotePartitioningJob")
    private Job localPartitioningJob;
 
     @Test
     public void runJobTest() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addDate("date", new Date())
-                .addString("jobFlag", "partitioningJob")
+                .addString("jobFlag", "remotePartitioningJob")
                 .toJobParameters();
         jobLauncher.run(localPartitioningJob, jobParameters);
 
