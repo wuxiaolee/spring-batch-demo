@@ -30,6 +30,7 @@ public class JobFlowDemoConfiguration {
 
     /**
      * 创建Job执行FLow & Step
+     *
      * @return
      */
     @Bean
@@ -43,6 +44,7 @@ public class JobFlowDemoConfiguration {
 
     /**
      * 创建Flow:Step的集合
+     *
      * @return
      */
     @Bean
@@ -71,12 +73,12 @@ public class JobFlowDemoConfiguration {
 
     @Bean
     public Step jobFlowDemoStep3() {
+//        System.out.println(1/0);
         return stepBuilderFactory.get("jobFlowDemoStep3").tasklet(((contribution, chunkContext) -> {
             log.info("jobFlowStep3");
             return RepeatStatus.FINISHED;
         })).build();
     }
-
 
 
 }

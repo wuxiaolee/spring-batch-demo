@@ -3,6 +3,7 @@ package com.wl.config.paymentFlowBatchConfig;
 import com.wl.listener.MyJobExecutionListener;
 import com.wl.listener.MyStepExecutionListener;
 import com.wl.model.PaymentFlowEntity;
+import com.wl.model.UserPaymentReportEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
@@ -16,6 +17,8 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.converter.DefaultJobParametersConverter;
 import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
@@ -27,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import java.math.BigDecimal;
 
@@ -67,14 +71,29 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
 
     private ApplicationContext context;
 
-
+//    @Bean
+//    public Job jobOperatorFlowJob() throws Exception {
+//        return jobBuilderFactory.get("jobOperatorFlowJob")
+//                .listener(jobListener)
+//                .start(jobOperatorPaymentFlowStep())
+//                .next(jobOperatorPaymentFlowReportStep())
+//                .build();
+//    }
 
     @Bean
-    public Job jobOperatorFlowJob(Step statisticsPaymentFlowStep) {
+    public Job jobOperatorFlowJob() throws Exception {
         return jobBuilderFactory.get("jobOperatorFlowJob")
-                .listener(jobListener)
-                .flow(statisticsPaymentFlowStep)
+                .start(jobOperatorPaymentFlowStep())
+                .split(new SimpleAsyncTaskExecutor())
+                .add(reportFlow())
                 .end()
+                .build();
+    }
+
+    @Bean
+    public Flow reportFlow() throws Exception {
+        return new FlowBuilder<Flow>("reportFlow")
+                .start(jobOperatorPaymentFlowReportStep())
                 .build();
     }
 
@@ -90,6 +109,17 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
     }
 
     @Bean
+    public Step jobOperatorPaymentFlowReportStep() throws Exception {
+        return stepBuilderFactory.get("jobOperatorPaymentFlowReportStep")
+                .listener(stepListener)
+                .<UserPaymentReportEntity, UserPaymentReportEntity>chunk(10)
+                .reader(jobOperatorReader2())
+                .processor(jobOperatorProcessor2())
+                .writer(jobOperatorWriter2())
+                .build();
+    }
+
+    @Bean
     public MyBatisPagingItemReader<PaymentFlowEntity> jobOperatorReader() throws Exception {
         MyBatisPagingItemReader<PaymentFlowEntity> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
@@ -100,10 +130,35 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
     }
 
     @Bean
+    public MyBatisPagingItemReader<UserPaymentReportEntity> jobOperatorReader2() throws Exception {
+        MyBatisPagingItemReader<UserPaymentReportEntity> reader = new MyBatisPagingItemReader<>();
+        reader.setSqlSessionFactory(sqlSessionFactory);
+        reader.setQueryId("com.wl.mapper.UserPaymentFlowReportMapper.queryUserPaymentFlowReport");
+        reader.setPageSize(600);
+        System.out.println("reader=" + reader);
+        return reader;
+    }
+
+    @Bean
     public ItemProcessor<PaymentFlowEntity, PaymentFlowEntity> jobOperatorProcessor() {
         return item -> {
+//            if (item.getPaymentFlowId() == 5) {
+//                System.out.println(1/0);
+//            }
             System.out.println("item=" + item );
             item.setPaymentAmount(new BigDecimal(500));
+            return item;
+        };
+    }
+
+    @Bean
+    public ItemProcessor<UserPaymentReportEntity, UserPaymentReportEntity> jobOperatorProcessor2() {
+        return item -> {
+//            if (item.getId() == 2) {
+//                System.out.println(1/0);
+//            }
+            System.out.println("UserPaymentReportEntity=" + item );
+            item.setAmount(new BigDecimal(500));
             return item;
         };
     }
@@ -113,6 +168,15 @@ public class JobOperatorDemoConfiguration implements ApplicationContextAware{
         MyBatisBatchItemWriter<PaymentFlowEntity> writer = new MyBatisBatchItemWriter<>();
         writer.setSqlSessionFactory(sqlSessionFactory);
         writer.setStatementId("com.wl.mapper.PaymentFlowMapper.updatePaymentFlow");
+        System.out.println("writer=" + writer);
+        return writer;
+    }
+
+    @Bean
+    public MyBatisBatchItemWriter<UserPaymentReportEntity> jobOperatorWriter2() throws Exception {
+        MyBatisBatchItemWriter<UserPaymentReportEntity> writer = new MyBatisBatchItemWriter<>();
+        writer.setSqlSessionFactory(sqlSessionFactory);
+        writer.setStatementId("com.wl.mapper.UserPaymentFlowReportMapper.add");
         System.out.println("writer=" + writer);
         return writer;
     }

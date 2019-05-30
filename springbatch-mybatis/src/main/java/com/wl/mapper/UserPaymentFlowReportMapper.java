@@ -26,4 +26,10 @@ public interface UserPaymentFlowReportMapper<T> extends MysqlCommonMapper<T> {
      * @return
      */
     int batchInsert(List<UserPaymentReportEntity> userPaymentReportEntities);
+
+    /**
+     * find ...
+     * @return
+     */
+    UserPaymentReportEntity queryUserPaymentFlowReport();
 }

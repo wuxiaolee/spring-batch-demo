@@ -25,7 +25,7 @@ import java.util.Date;
 @SpringBootTest
 
 @ImportResource(locations= {"classpath:myJob.xml"})
-public class checkpointTest {
+public class CheckpointTest {
 
     @Autowired
     private  JobLauncher jobLauncher;

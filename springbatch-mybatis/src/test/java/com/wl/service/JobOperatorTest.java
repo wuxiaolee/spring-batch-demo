@@ -23,7 +23,7 @@ import java.util.Set;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BatchTest {
+public class JobOperatorTest {
 
     @Autowired
     private  JobLauncher jobLauncher;
@@ -99,8 +99,8 @@ public class BatchTest {
      */
     @Test
     public void restartJob() throws JobParametersInvalidException, JobRestartException, JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
-        Long jobExecutionId = jobOperator.restart(251L);
-        System.out.println("jobExectionId=" + jobExecutionId);
+        Long jobExecutionId = jobOperator.restart(598L);
+        System.out.println("jobExecutionId=" + jobExecutionId);
     }
 
 
