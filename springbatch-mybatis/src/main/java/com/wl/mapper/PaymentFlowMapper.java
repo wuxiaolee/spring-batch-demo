@@ -2,6 +2,7 @@ package com.wl.mapper;
 
 import com.wl.model.PaymentFlowEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -32,4 +33,9 @@ public interface PaymentFlowMapper {
     void add(PaymentFlowEntity paymentFlowEntity);
 
     void updatePaymentFlow(PaymentFlowEntity paymentFlowEntity);
+
+    List<PaymentFlowEntity> findList(@Param("page") Integer page, @Param("size") Integer size);
+
+    int count();
+
 }

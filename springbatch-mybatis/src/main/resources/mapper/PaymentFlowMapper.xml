@@ -33,6 +33,17 @@
       limit #{_skiprows}, #{_pagesize}
     </select>
 
+    <select id="findList" resultMap="BaseResultMap">
+        select payment_flow_id, order_id, user_id, payment_channel, payment_amount, payment_state, create_date
+        from payment_flow
+        order by payment_flow_id
+        limit #{page}, #{size}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from payment_flow
+    </select>
+
     <update id="updatePaymentFlow" parameterType="com.wl.model.PaymentFlowEntity">
         update payment_flow
         <trim prefix="set" suffixOverrides=",">
