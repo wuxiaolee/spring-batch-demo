@@ -6,6 +6,7 @@ import com.wl.itemoperation.SlaveUserInfoProcessor;
 import com.wl.itemoperation.SlaveUserInfoWriter;
 import com.wl.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -134,6 +135,13 @@ public class LocalPartitioningJobConfiguration {
         }
         return reader;
 
+    }
+
+    @Bean
+    @StepScope
+    public MyBatisPagingItemReader mybatisSlaveReader() {
+
+        return null;
     }
 
 
